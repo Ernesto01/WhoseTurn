@@ -10,11 +10,16 @@ import com.google.appengine.api.datastore.Query;
 
 public class User {
 	// Create user entity and add it to the datastore for persistence
-	public static void createUser(String name) {
+	public static void createUser(String name, String description, boolean isAdmin) {
 		Entity user = getUser(name);
 		if(user == null) {
 			user = new Entity("User", name);
-			
+			user.setProperty("description", description);
+			user.setProperty("admin", isAdmin);
+		}
+		else {
+			user.setProperty("description", description);
+			user.setProperty("admin", isAdmin);
 		}
 		Util.persistEntity(user);
 	}

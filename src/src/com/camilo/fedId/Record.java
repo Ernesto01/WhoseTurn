@@ -5,7 +5,6 @@
 package com.camilo.fedId;
 
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +39,12 @@ public class Record {
 		}
 		Util.persistEntity(record);
 		return record;
+	}
+	
+	// Get all records
+	public static Iterable<Entity> getAllRecords() {
+		Iterable<Entity> entities = Util.listEntities("Record", null, null);
+		return entities;
 	}
 	
 	// delete record corresponding to given record name
@@ -79,28 +84,18 @@ public class Record {
 	}
 	
 	// Increment times gone
-	// returns true if successful in incrementing, false otherwise
-	public static boolean incrementTimesGone(String recordName) {
-		Entity record = getSingleRecord(recordName);
+	// returns record Entity if successful, null otherwise
+	public static Entity incrementTimesGone(String userName, String category) {
+		Entity record = getSingleRecord(userName+category);
 		if(record != null) {
-			record.setProperty("timesGone", (java.lang.Long)record.getProperty("timesGone") + 1);
-			return true;
+			record = createOrUpdateRecord(userName, category, (java.lang.Long)record.getProperty("timesGone")+1,
+					(java.lang.Long)record.getProperty("timeUsed"));
+			return record;
 		}
-		return false;
+		return null;
 	}
 	
 	// Increment times used
-	// returns true if successful in incrementing, false otherwise
-	public static boolean incrementTimesUsed(String recordName) {
-		Entity record = getSingleRecord(recordName);
-		if(record != null) {
-			record.setProperty("timesUsed", 3);
-			
-			return true;
-		}
-		return false;
-	}
-	
 	public static Entity incrementTimesUsed(String userName, String category) {
 		Entity record = getSingleRecord(userName + category);
 		
