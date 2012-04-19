@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>fedId</name>
+	<name>whoseturn</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -12,6 +12,11 @@
 		</buildCommand>
 		<buildCommand>
 			<name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -29,5 +34,6 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
+		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
 	</natures>
 </projectDescription>
