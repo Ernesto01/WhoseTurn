@@ -103,7 +103,7 @@ public class Whoseturn implements EntryPoint {
 		absolutePanel_1.add(cellTable, 10, 141);
 		cellTable.setSize("189px", "156px");
 		
-		
+		// Handle Category input here --------
 		txtbxEnterCategory.setText("Enter category");
 		absolutePanel_1.add(txtbxEnterCategory, 124, 35);
 		txtbxEnterCategory.setSize("143px", "20px");
@@ -121,6 +121,13 @@ public class Whoseturn implements EntryPoint {
 		absolutePanel_1.add(txtbtnAddCategory, 281, 35);
 		txtbtnAddCategory.setSize("102px", "28px");
 		
+		// Listen for mouse events on the Add button.
+	    txtbtnAddCategory.addClickHandler(new ClickHandler() {
+	      public void onClick(ClickEvent event) {
+	        addCategory();
+	      }
+	    });
+		// ------------
 		
 		absolutePanel_1.add(lblCategoryStatus, 124, 74);
 		lblCategoryStatus.setSize("114px", "28px");
