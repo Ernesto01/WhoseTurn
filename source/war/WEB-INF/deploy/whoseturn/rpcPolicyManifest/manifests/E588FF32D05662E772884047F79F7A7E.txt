@@ -1,0 +1,2 @@
+serviceClass: edu.unlv.cs.whoseturn.client.UsersService
+path: AEDA8D60ED33471511E00ACB498317D1.gwt.rpc

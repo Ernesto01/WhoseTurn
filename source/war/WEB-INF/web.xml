@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+ 
+  <servlet>
+    <servlet-name>usersServlet</servlet-name>
+    <servlet-class>edu.unlv.cs.whoseturn.server.UsersServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>categoryServlet</servlet-name>
+    <servlet-class>edu.unlv.cs.whoseturn.server.CategoryServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>usersServlet</servlet-name>
+    <url-pattern>/whoseturn/users</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>categoryServlet</servlet-name>
+    <url-pattern>/whoseturn/categories</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>Whoseturn.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>
