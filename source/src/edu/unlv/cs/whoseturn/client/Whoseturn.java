@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -40,10 +41,12 @@ public class Whoseturn implements EntryPoint {
 	TextBox txtbxEnterCategory = new TextBox();
 	Label lblCategoryStatus = new Label("Category status");
 	ListBox listBox = new ListBox();
+	private FlexTable userFlexTable = new FlexTable();
+	Label lblUserlabel = new Label("userLabel");
 	
 	// Functionality variables
+	private List<String> users = new ArrayList<String>();
 	private ArrayList<String> selectedUsers = new ArrayList<String>();
-	
 	private String selectedCategory;
 	
 	// Declare and define services
@@ -96,13 +99,6 @@ public class Whoseturn implements EntryPoint {
 		      }
 		});
 		
-		
-		
-		// Table to hold and display users for selection
-		CellTable<Object> cellTable = new CellTable<Object>();
-		absolutePanel_1.add(cellTable, 10, 141);
-		cellTable.setSize("189px", "156px");
-		
 		// Handle Category input here --------
 		txtbxEnterCategory.setText("Enter category");
 		absolutePanel_1.add(txtbxEnterCategory, 124, 35);
@@ -136,6 +132,21 @@ public class Whoseturn implements EntryPoint {
 		absolutePanel_1.add(listBox, 10, 34);
 		listBox.setSize("96px", "68px");
 		listBox.setVisibleItemCount(5);
+		
+		// Add User table and configure
+		userFlexTable.setText(0, 0, "Username");
+	    userFlexTable.setText(0, 1, "Add");
+	    userFlexTable.setText(0, 2, "Remove");
+		absolutePanel_1.add(userFlexTable, 10, 114);
+		
+		
+		absolutePanel_1.add(lblUserlabel, 327, 114);
+		
+		loadUsers();
+		addUsersToTable();
+	  
+	    
+	    // -----------
 		
 		final AbsolutePanel absolutePanel_2 = new AbsolutePanel();
 		decoratedTabPanel.add(absolutePanel_2, "AdminSettings", false);
@@ -322,8 +333,63 @@ public class Whoseturn implements EntryPoint {
 	    addCategory(symbol);
 	}
 	
+	// Load users from datastore to memory for UI output
+	private void loadUsers() {
+		usersService.getUsernames(new AsyncCallback<List<String>>() {
+			public void onFailure(Throwable error) {
+				lblUserlabel.setText("failure");
+			}
+			
+			public void onSuccess(List<String> result) {
+				if(!result.isEmpty())
+					lblUserlabel.setText("not empty");
+				addUsersToTable(result);
+
+			}
+		});
+	}
+	
+	private void addUsersToTable() {
+		int row = 0;
+		for(String user : users) {
+			row = userFlexTable.getRowCount();
+			userFlexTable.setText(row, 0, user);
+		}
+	}
+	
+	private void addUsersToTable(final List<String> users) {
+		int row = 0;
+	
+		for(final String user : users) {
+			row = userFlexTable.getRowCount();
+			userFlexTable.setText(row, 0, user);
+			
+			// Add second column to remove user
+			Button addUserButton = new Button("Add");
+			addUserButton.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					int addIndex = users.indexOf(user);
+					selectedUsers.add(user);
+				}
+			});
+			
+			// Add third column to remove user
+			Button removeUserButton = new Button("x");
+		    removeUserButton.addClickHandler(new ClickHandler() {
+		      public void onClick(ClickEvent event) {
+		        int removedIndex = users.indexOf(user);
+		        userFlexTable.removeRow(removedIndex + 1);
+		      }
+		    });
+		    userFlexTable.setWidget(row, 2, addUserButton);
+		    userFlexTable.setWidget(row, 3, removeUserButton);
+		}
+		
+		
+	}
+	
 	private void addCategory(String newCategory) {
-		lblCategoryStatus.setText("Hello");
+		
 		categoryService.addCategory(newCategory, new AsyncCallback<Void>() {
 			public void onFailure(Throwable error) {
 				lblCategoryStatus.setText("Error");
@@ -439,15 +505,4 @@ public class Whoseturn implements EntryPoint {
 	private void addToComboBox(String category) {
 		listBox.addItem(category);
 	}
-	
-	/*
-	private void addToComboBox(List<String> categories) {
-		int count = comboBox.getItemCount();
-		for(String category : categories) {
-			comboBox.setItemText(count++, category);
-		}
-		comboBox.setItemText(count, "Test");
-		
-	}
-	*/
 }

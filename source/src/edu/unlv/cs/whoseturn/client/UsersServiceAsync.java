@@ -29,4 +29,7 @@ public interface UsersServiceAsync {
 	
 	void findUserByKey(String key, AsyncCallback<String> callback)
 			throws IllegalArgumentException;
+	
+	void getUsernames(AsyncCallback<List<String>> callback) 
+			throws IllegalArgumentException;
 }

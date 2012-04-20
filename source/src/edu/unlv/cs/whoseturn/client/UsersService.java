@@ -16,4 +16,5 @@ public interface UsersService extends RemoteService {
 	String addTestUser(String username, String email, Boolean admin) throws IllegalArgumentException;
 	List<String[]> findUsers() throws IllegalArgumentException;
 	String findUserByKey(String key) throws IllegalArgumentException;
+	List<String> getUsernames() throws IllegalArgumentException;
 }

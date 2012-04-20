@@ -142,6 +142,23 @@ public class UsersServiceImpl extends RemoteServiceServlet implements
 		return resultStringList;
 	}
 	
+	public List<String> getUsernames() {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		List<String> usernames = new ArrayList<String>();
+		List<edu.unlv.cs.whoseturn.domain.User> results;
+		
+		try {
+			javax.jdo.Query query = pm.newQuery(edu.unlv.cs.whoseturn.domain.User.class);
+			results = (List<edu.unlv.cs.whoseturn.domain.User>) query.execute();
+			for(edu.unlv.cs.whoseturn.domain.User e : results) {
+				usernames.add(e.getUsername());
+			}
+		} finally {
+			pm.close();
+		}
+		return usernames;
+	}
+	
 	public String findUserByKey(String key)
 	{
 		PersistenceManager pm = PMF.get().getPersistenceManager();
