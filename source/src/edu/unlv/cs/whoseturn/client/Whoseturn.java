@@ -40,14 +40,16 @@ public class Whoseturn implements EntryPoint {
 	final AbsolutePanel loginPanel = new AbsolutePanel();
 	TextBox txtbxEnterCategory = new TextBox();
 	Label lblCategoryStatus = new Label("Category status");
-	ListBox listBox = new ListBox();
+	ListBox listBox = new ListBox(false);
 	private FlexTable userFlexTable = new FlexTable();
 	Label lblUserlabel = new Label("userLabel");
+	TextButton txtbtnChooseUser = new TextButton("Choose User");
 	
 	// Functionality variables
 	private List<String> users = new ArrayList<String>();
 	private ArrayList<String> selectedUsers = new ArrayList<String>();
 	private String selectedCategory;
+	private List<String> categoryNames = new ArrayList<String>();
 	
 	// Declare and define services
 	private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
@@ -89,20 +91,13 @@ public class Whoseturn implements EntryPoint {
 		absolutePanel_1.add(lblNewLabel_1, 10, 10);
 		
 		// Get all category names and use them to populate combo box
-		categoryService.getAllCategories(new AsyncCallback<List<String>>() {
-		      public void onFailure(Throwable error) {
-		    	  lblNewLabel_1.setText("Failure on combo box loading");
-		      }
-		      public void onSuccess(List<String> categories) {
-		    	  //if(categories != null)
-		    		  //addToComboBox(categories);
-		      }
-		});
+		loadCategories();
+		
 		
 		// Handle Category input here --------
 		txtbxEnterCategory.setText("Enter category");
-		absolutePanel_1.add(txtbxEnterCategory, 124, 35);
-		txtbxEnterCategory.setSize("143px", "20px");
+		absolutePanel_1.add(txtbxEnterCategory, 175, 35);
+		txtbxEnterCategory.setSize("158px", "20px");
 		
 		// Listen for keyboard events in the input box.
 		txtbxEnterCategory.addKeyPressHandler(new KeyPressHandler() {
@@ -114,7 +109,7 @@ public class Whoseturn implements EntryPoint {
 	    });
 		
 		TextButton txtbtnAddCategory = new TextButton("Add Category");
-		absolutePanel_1.add(txtbtnAddCategory, 281, 35);
+		absolutePanel_1.add(txtbtnAddCategory, 347, 35);
 		txtbtnAddCategory.setSize("102px", "28px");
 		
 		// Listen for mouse events on the Add button.
@@ -125,7 +120,7 @@ public class Whoseturn implements EntryPoint {
 	    });
 		// ------------
 		
-		absolutePanel_1.add(lblCategoryStatus, 124, 74);
+		absolutePanel_1.add(lblCategoryStatus, 175, 69);
 		lblCategoryStatus.setSize("114px", "28px");
 		
 		
@@ -133,14 +128,20 @@ public class Whoseturn implements EntryPoint {
 		listBox.setSize("96px", "68px");
 		listBox.setVisibleItemCount(5);
 		
-		// Add User table and configure
+		// Add User table and configure -------
 		userFlexTable.setText(0, 0, "Username");
-	    userFlexTable.setText(0, 1, "Add");
-	    userFlexTable.setText(0, 2, "Remove");
+	    userFlexTable.setText(0, 1, "Select");
+	    userFlexTable.setText(0, 2, "Unselect");
+	    userFlexTable.setText(0, 3, "Remove");
 		absolutePanel_1.add(userFlexTable, 10, 114);
 		
 		
-		absolutePanel_1.add(lblUserlabel, 327, 114);
+		absolutePanel_1.add(lblUserlabel, 347, 144);
+		lblUserlabel.setSize("98px", "28px");
+		
+		
+		absolutePanel_1.add(txtbtnChooseUser, 347, 110);
+		txtbtnChooseUser.setSize("102px", "28px");
 		
 		loadUsers();
 		addUsersToTable();
@@ -324,10 +325,9 @@ public class Whoseturn implements EntryPoint {
 	    txtbxEnterCategory.setText("");
 
 	    // Don't add the category if it's already in the table.
-	    /*
-	    if (stocks.contains(symbol))
+	    if (categoryNames.contains(symbol))
 	      return;
-	      */
+	     
 
 	    addToComboBox(symbol);
 	    addCategory(symbol);
@@ -349,6 +349,25 @@ public class Whoseturn implements EntryPoint {
 		});
 	}
 	
+	//Populate categories list with categories in datastore
+	private void loadCategories() {
+		categoryService.getAllCategories(new AsyncCallback<List<String>>() {
+			public void onFailure(Throwable error) {
+				
+			}
+			
+			public void onSuccess(List<String> result) {
+				addCategoriesToList(result);
+			}
+		});
+	}
+	
+	private void addCategoriesToList(List<String> categories) {
+		for(String category : categories) {
+			addToComboBox(category);
+		}
+	}
+	
 	private void addUsersToTable() {
 		int row = 0;
 		for(String user : users) {
@@ -365,7 +384,7 @@ public class Whoseturn implements EntryPoint {
 			userFlexTable.setText(row, 0, user);
 			
 			// Add second column to remove user
-			Button addUserButton = new Button("Add");
+			Button addUserButton = new Button("Select");
 			addUserButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					int addIndex = users.indexOf(user);
@@ -373,7 +392,15 @@ public class Whoseturn implements EntryPoint {
 				}
 			});
 			
-			// Add third column to remove user
+			// Add third column to deselect user
+			Button unselectUserButton = new Button("Unselect");
+			addUserButton.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					selectedUsers.remove(user);
+				}
+			});
+			
+			// Add fourth column to remove user
 			Button removeUserButton = new Button("x");
 		    removeUserButton.addClickHandler(new ClickHandler() {
 		      public void onClick(ClickEvent event) {
@@ -382,7 +409,8 @@ public class Whoseturn implements EntryPoint {
 		      }
 		    });
 		    userFlexTable.setWidget(row, 2, addUserButton);
-		    userFlexTable.setWidget(row, 3, removeUserButton);
+		    userFlexTable.setWidget(row, 3, unselectUserButton);
+		    userFlexTable.setWidget(row, 4, removeUserButton);
 		}
 		
 		
@@ -503,6 +531,7 @@ public class Whoseturn implements EntryPoint {
 	}
 	
 	private void addToComboBox(String category) {
+		categoryNames.add(category);
 		listBox.addItem(category);
 	}
 }
