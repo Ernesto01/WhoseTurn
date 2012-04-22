@@ -87,8 +87,9 @@ public class Whoseturn implements EntryPoint {
 		decoratedTabPanel.add(absolutePanel_1, "Main", false);
 		absolutePanel_1.setSize("650px", "544px");
 		
-		final Label lblNewLabel_1 = new Label("Choose Category");
-		absolutePanel_1.add(lblNewLabel_1, 10, 10);
+		final Label lblChooseCategory = new Label("Choose Category");
+		lblChooseCategory.addStyleName("watchCategory");
+		absolutePanel_1.add(lblChooseCategory, 10, 10);
 		
 		// Get all category names and use them to populate combo box
 		loadCategories();
@@ -133,14 +134,21 @@ public class Whoseturn implements EntryPoint {
 	    userFlexTable.setText(0, 1, "Select");
 	    userFlexTable.setText(0, 2, "Unselect");
 	    userFlexTable.setText(0, 3, "Remove");
-		absolutePanel_1.add(userFlexTable, 10, 114);
+	    
+	    // Add styles to elements in the stock list table.
+	    userFlexTable.setCellPadding(6);
+	    userFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
+	    userFlexTable.addStyleName("watchList");
+	    userFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
+	    
+		absolutePanel_1.add(userFlexTable, 10, 124);
 		
 		
-		absolutePanel_1.add(lblUserlabel, 347, 144);
+		absolutePanel_1.add(lblUserlabel, 351, 169);
 		lblUserlabel.setSize("98px", "28px");
 		
 		
-		absolutePanel_1.add(txtbtnChooseUser, 347, 110);
+		absolutePanel_1.add(txtbtnChooseUser, 347, 124);
 		txtbtnChooseUser.setSize("102px", "28px");
 		
 		loadUsers();
@@ -372,6 +380,8 @@ public class Whoseturn implements EntryPoint {
 		int row = 0;
 		for(String user : users) {
 			row = userFlexTable.getRowCount();
+			//Label widget = (Label) userFlexTable.getWidget(row, 0);
+			//widget.setText(user);
 			userFlexTable.setText(row, 0, user);
 		}
 	}
@@ -381,22 +391,34 @@ public class Whoseturn implements EntryPoint {
 	
 		for(final String user : users) {
 			row = userFlexTable.getRowCount();
+			//userFlexTable.setWidget(row, 0, new Label(user));
+			//Label widget = (Label)userFlexTable.getWidget(row, 0);
+			//widget.setStyleName("hasChange");
 			userFlexTable.setText(row, 0, user);
+			
+			// Add style 
+			userFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
+			userFlexTable.getCellFormatter().addStyleName(row, 0, "watchListNameColumn");
 			
 			// Add second column to remove user
 			Button addUserButton = new Button("Select");
 			addUserButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					int addIndex = users.indexOf(user);
+					userFlexTable.getCellFormatter().addStyleName(addIndex+1, 0, "watchListSelectedNameColumn");
 					selectedUsers.add(user);
 				}
 			});
 			
 			// Add third column to deselect user
 			Button unselectUserButton = new Button("Unselect");
-			addUserButton.addClickHandler(new ClickHandler() {
+			unselectUserButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
+					int unselectIndex = users.indexOf(user);
+					//userFlexTable.getCellFormatter().addStyleName(unselectIndex+1, 0, "watchListNameColumn");
+					userFlexTable.getCellFormatter().setStyleName(unselectIndex+1, 0, "watchListNameColumn");
 					selectedUsers.remove(user);
+					lblUserlabel.setText("inside");
 				}
 			});
 			
@@ -405,12 +427,13 @@ public class Whoseturn implements EntryPoint {
 		    removeUserButton.addClickHandler(new ClickHandler() {
 		      public void onClick(ClickEvent event) {
 		        int removedIndex = users.indexOf(user);
+		        users.remove(removedIndex);
 		        userFlexTable.removeRow(removedIndex + 1);
 		      }
 		    });
-		    userFlexTable.setWidget(row, 2, addUserButton);
-		    userFlexTable.setWidget(row, 3, unselectUserButton);
-		    userFlexTable.setWidget(row, 4, removeUserButton);
+		    userFlexTable.setWidget(row, 1, addUserButton);
+		    userFlexTable.setWidget(row, 2, unselectUserButton);
+		    userFlexTable.setWidget(row, 3, removeUserButton);
 		}
 		
 		

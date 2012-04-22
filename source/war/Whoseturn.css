@@ -2,38 +2,54 @@
 
 
 /** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
+
+body {
+  padding: 10px;
+}
+
+
+.watchListHeader {
+  background-color: #1222AB;
+  color: white;
+  font-style: normal;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+
+.watchList {
+  border: 1px solid blue;
+  padding: 2px;
+  margin-bottom:6px;
+}
+
+.watchListRemoveColumn {
   text-align: center;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.watchListNameColumn {
+	text-align: left;
+	font-style: normal;
+	font-family: "Courier New", Verdana;
+	font-size: 15px;
+	font-weight: 300;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+.watchListSelectedNameColumn {
+	text-align: left;
+	font-style: italic;
+	font-family: "Courier New", Verdana;
+	font-size: 16px;
+	font-weight: 900;
 }
 
-.dialogVPanel {
-  margin: 5px;
+.watchCategory {
+	font-color: white;
+	font-weight: 700;
+	font-size: 15px;
+	font-family: Verdana;
 }
 
-.serverResponseLabelError {
-  color: red;
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
-}
-.h1 {
-}
-.Header {
-	font-size: 36px;
+.hasChange {
+	color : blue;
 }

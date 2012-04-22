@@ -60,7 +60,6 @@ public class CategoryServiceImpl extends RemoteServiceServlet implements Categor
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		if(pm.isClosed())
 			return null;
-		//return null;
 		
 	    
 	    try {
@@ -73,7 +72,6 @@ public class CategoryServiceImpl extends RemoteServiceServlet implements Categor
 	    } finally {
 	        pm.close();
 	    }
-	    //return null;
 	    
 	    return categoryNames;
 	    
