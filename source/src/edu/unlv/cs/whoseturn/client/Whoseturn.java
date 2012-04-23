@@ -147,9 +147,17 @@ public class Whoseturn implements EntryPoint {
 		absolutePanel_1.add(lblUserlabel, 351, 169);
 		lblUserlabel.setSize("98px", "28px");
 		
-		
+		// Choose User button UI and on click logic
 		absolutePanel_1.add(txtbtnChooseUser, 347, 124);
 		txtbtnChooseUser.setSize("102px", "28px");
+		
+		txtbtnChooseUser.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				chooseUser();
+			}
+		});
+		
+		// -----------------
 		
 		loadUsers();
 		addUsersToTable();
@@ -316,6 +324,25 @@ public class Whoseturn implements EntryPoint {
 		
 		// Select initial tab 
 		decoratedTabPanel.selectTab(0);
+	}
+	
+	// Choose user based on category and record history
+	private void chooseUser() {
+		if(selectedUsers.isEmpty()) {
+			Window.alert("Cannot choose user with no selected users");
+			return;
+		}
+		
+		int index = listBox.getSelectedIndex();
+		if(index == -1) {
+			Window.alert("Must select a category before choosing user");
+			return;
+		}
+		selectedCategory = listBox.getItemText(index);
+		
+		// Iterate through selectedUsers record history for selectedCategory and choose
+		
+			
 	}
 	
 	// Add category from the category text box
