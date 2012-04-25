@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+
+<jsp:root xmlns="http://www.w3.org/1999/xhtml" version="2.0" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/jstl/core">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<html>
+<head>
+	<title>Whose Turn?</title>
+	<link rel="stylesheet" href="mobile.css" />
+</head>
+<body>
+	<div class="wrapper">
+		<h1><br />Whose Turn?<br /><br /></h1>
+		<h3>Hello ${ currentUser.nickname }!<br /><br /></h3>
+		<h2>Category selection</h2>
+		<h3>
+			<c:forEach var="category" varStatus="categoryStatus" items="${categories}">
+				<a href="category?keyString=${category.keyString}" class="button">${category.name}</a>
+			</c:forEach>
+		</h3>
+	</div>
+	
+	${dbgtext}
+	
+	<div class="footer">
+		<br />
+		<a href="" class="button">Confirm 3 turns</a>
+		<a href="" class="button">App Settings</a>
+	</div>
+	
+</body>
+
+	</html>
+</jsp:root>

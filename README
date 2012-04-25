@@ -1,1 +1,7 @@
 This is the third project for CS 473 @ UNLV. This project consists of a web app that determines whose turn it is to drive based on fair algorithm. 
+
+File organization:
+examples contains older builds that ended up not being used.
+src contains a very old build with log-in and initial GWT implementation.
+source contains a stand-alone build that was only partially merged to final branch with GWT implementation.
+source2 contains the latest and currently used build from the team.

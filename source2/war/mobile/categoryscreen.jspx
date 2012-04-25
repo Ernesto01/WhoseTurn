@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+
+<jsp:root xmlns="http://www.w3.org/1999/xhtml" version="2.0" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/jstl/core">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+	<html>
+<head>
+	<title>Whose Turn?</title>
+	<link rel="stylesheet" href="mobile.css" />
+</head>
+<body>
+	<script type="text/javascript" language="javascript">
+		var selected_person_set = {};
+		
+		function personSetSelected(key, value) {
+			selected_person_set[key] = value;
+		}
+		
+		function togglePerson(object, key) {
+			
+			var isSelected = object.getAttribute("class") == "selected";
+			newAttribute = isSelected ? "unselected" : "selected";
+			object.setAttribute("class", newAttribute);
+			personSetSelected(key, !isSelected);
+		}
+		
+		function postSelectedPersons() {
+			
+			var serialized = ""
+			for (var person in selected_person_set) {
+				if (!selected_person_set[person]) {
+					continue;
+				}
+				
+// 				var inner = document.createTextNode(person);
+// 				var br = document.createElement("br");
+// 				docfrag.appendChild(inner);
+// 				docfrag.appendChild(br);
+				
+				serialized += person + ",";
+			}
+
+			var docfrag = document.createDocumentFragment();
+			var form = document.createElement('form');
+			form.setAttribute('action', '?keyString=${currentCategory.keyString}')
+			form.setAttribute('method', 'post');
+			var input = document.createElement('input');
+			input.setAttribute('type', 'hidden');
+			input.setAttribute('name', 'selectedPersons');
+			input.setAttribute('value', serialized);
+
+			document.getElementById('divinsert').appendChild(docfrag);
+			docfrag.appendChild(form);
+			form.appendChild(input);
+			
+			form.submit();
+		}
+	</script>
+	
+	<div class="wrapper">
+		<h5><a href="index" class="button">Return to category selection</a><br /></h5>
+		<h1>${currentCategory.name}</h1>
+		
+		<h3>
+			Strategy <a href="" class="inlinebutton">S:P ratios <font size="1">(Change)</font></a>
+		</h3>
+		
+		<h2>Participant selection</h2>
+		<h3>
+			<c:forEach var="person" varStatus="personStatus" items="${persons}">
+				<c:choose>
+					<c:when test="${person.selected}">
+						<a href="" class="selected" onclick="togglePerson(this, '${person.keyString}'); return false;">${person.username}</a>
+						<script type="text/javascript" language="javascript">
+							personSetSelected("${person.keyString}", true);
+						</script>
+					</c:when>
+					<c:otherwise>
+						<a href="" class="unselected" onclick="togglePerson(this, '${person.keyString}'); return false;">${person.username}</a>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+		</h3>
+		
+		${dbg}
+		<div id="divinsert" />
+	</div>
+	
+	<div class="footer">
+		<br />
+		<a href="" class="button" onclick="postSelectedPersons(); return false;">Whose turn?</a>
+	</div>
+	
+</body>
+
+	</html>
+</jsp:root>
